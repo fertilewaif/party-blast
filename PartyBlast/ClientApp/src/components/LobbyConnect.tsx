@@ -10,10 +10,13 @@ type LobbyConnectProps =
     LobbyConnect.ConnectState &
     typeof LobbyConnect.actionCreators;
 
-function LobbyConnector(props: LobbyConnectProps) {
+const LobbyConnector: React.FC<LobbyConnectProps> = (props: LobbyConnectProps) => {
     const [login, setLogin] = useState<string>('');
     const [lobbyCode, setLobbyCode] = useState<string>('');
-
+    
+    const maxLength = 15;
+    const [loginLengthLeft, setLoginLengthLeft] = useState<number>(maxLength);
+    
     const createLobby = (event: MouseEvent) => {
         event.preventDefault();
         props.requestCreate({gameName: "quiz"});
@@ -26,12 +29,14 @@ function LobbyConnector(props: LobbyConnectProps) {
 
     return (
         <>
-            <Form>
+            <Form style={{ width: "30%", margin: "0 auto"}}>
                 <FormGroup>
                     <Label>Username</Label>
+                    <Label className="text-right" style={{ width: "75%"}}>{loginLengthLeft}</Label>
                     <Input type="text"
                            onChange={(ev): void => {
                                setLogin(ev.target.value);
+                               setLoginLengthLeft(maxLength - ev.target.value.length);
                            }}
                     />
                 </FormGroup>
@@ -43,7 +48,7 @@ function LobbyConnector(props: LobbyConnectProps) {
                            }}
                     />
                 </FormGroup>
-                <Button color="primary" size="lg" block onClick={() => connectToLobby}>Join lobby</Button>
+                <Button color="primary" size="lg" block onClick={() => connectToLobby} disabled={loginLengthLeft < 0}>Join lobby</Button>
                 <Button color="primary" size="lg" block onClick={() => createLobby}>Create lobby</Button>
                 {props.connectError &&
                 <h1>Wrong lobby code</h1>
