@@ -9,7 +9,7 @@ export interface ConnectState {
     lobbyCode?: string;
     connected: boolean;
     gameName?: string;
-    isLoading: boolean;
+    isLoadingConnect: boolean;
     connectError: boolean;
 }
 
@@ -53,7 +53,7 @@ interface ConnectResponse {
 // REMOVE AFTER ADDING FUNCTIONALITY OF CREATING LOBBY IN GAME
 export interface CreateLobbyState {
     lobbyCode?: string;
-    isLoading: boolean;
+    isLoadingCreate: boolean;
 }
 
 interface CreateLobbyRequest {
@@ -80,7 +80,7 @@ type CreateAction = CreateLobbyRequestAction | CreateLobbyResponseAction;
 export const actionCreators = {
     requestCreate: (gameName: CreateLobbyRequest): AppThunkAction<CreateAction> => (dispatch, getState) => {
         const appState = getState();
-        if (appState && appState.createInfo && !appState.createInfo.lobbyCode) {
+        if (appState && appState.create && !appState.create.lobbyCode) {
             fetch('/api/create', {
                 method: 'POST',
                 headers: {
@@ -97,7 +97,7 @@ export const actionCreators = {
     requestConnect: (login: ConnectRequest): AppThunkAction<KnownAction> => (dispatch, getState) => {
         // connect only if we are not logged in
         const appState = getState();
-        if (appState && appState.loginInfo && !appState.loginInfo.connected) {
+        if (appState && appState.connect && !appState.connect.connected) {
             fetch('/api/connect', {
                 method: 'POST',
                 headers: {
@@ -119,7 +119,7 @@ export const actionCreators = {
     }
 }
 const defaultCreateState: CreateLobbyState = {
-    isLoading: false, 
+    isLoadingCreate: false, 
     lobbyCode: undefined
 }
 
@@ -132,11 +132,11 @@ export const createReducer: Reducer<CreateLobbyState> = (state: CreateLobbyState
         case "CREATE_REQUEST":
             return {
                 ...state,
-                isLoading: true,
+                isLoadingCreate: true,
             };
         case "CREATE_RESPONSE":
             return {
-                isLoading: false,
+                isLoadingCreate: false,
                 lobbyCode: action.lobbyCode,
             };
     }
@@ -152,7 +152,7 @@ const unloadedState: ConnectState = {
     lobbyCode: undefined,
     connected: false,
     gameName: undefined,
-    isLoading: false,
+    isLoadingConnect: false,
     connectError: false,
 }
 
@@ -166,7 +166,7 @@ export const connectReducer: Reducer<ConnectState> = (state: ConnectState | unde
         case 'CONNECT_REQUEST':
             return {
                 ...state,
-                isLoading: true,
+                isLoadingConnect: true,
                 lobbyCode: action.lobbyCode
             };
         case "CONNECT_SUCCESS":
@@ -174,7 +174,7 @@ export const connectReducer: Reducer<ConnectState> = (state: ConnectState | unde
             return {
                 ...state,
                 login: action.login,
-                isLoading: false,
+                isLoadingConnect: false,
                 connected: true,
                 gameName: action.gameName,
                 connectError: false,
@@ -182,7 +182,7 @@ export const connectReducer: Reducer<ConnectState> = (state: ConnectState | unde
         case "CONNECT_ERROR":
             return {
                 ...state,
-                isLoading: false,
+                isLoadingConnect: false,
                 connectError: true,
             };
     }

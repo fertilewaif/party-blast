@@ -1,14 +1,16 @@
 ﻿import * as React from "react";
 import {connect} from 'react-redux';
 import * as LobbyConnect from '../store/LobbyConnect';
-import {Button, Form, FormGroup, Input, Label} from 'reactstrap';
+import {Button, Form, FormGroup, Input, Label, Spinner} from 'reactstrap';
 import {useState} from "react";
 import {ApplicationState} from "../store";
+import {RouteComponentProps} from "react-router";
 
 type LobbyConnectProps =
     LobbyConnect.CreateLobbyState &
     LobbyConnect.ConnectState &
-    typeof LobbyConnect.actionCreators;
+    typeof LobbyConnect.actionCreators &
+    RouteComponentProps<{}>;
 
 const LobbyConnector: React.FC<LobbyConnectProps> = (props: LobbyConnectProps) => {
     const [login, setLogin] = useState<string>('');
@@ -17,12 +19,12 @@ const LobbyConnector: React.FC<LobbyConnectProps> = (props: LobbyConnectProps) =
     const maxLength = 15;
     const [loginLengthLeft, setLoginLengthLeft] = useState<number>(maxLength);
     
-    const createLobby = (event: MouseEvent) => {
+    const createLobby = (event: React.MouseEvent<HTMLButtonElement>) => {
         event.preventDefault();
         props.requestCreate({gameName: "quiz"});
     };
 
-    const connectToLobby = (event: MouseEvent) => {
+    const connectToLobby = (event: React.MouseEvent<HTMLButtonElement>) => {
         event.preventDefault();
         props.requestConnect({login: login, lobbyCode: lobbyCode});
     };
@@ -48,8 +50,11 @@ const LobbyConnector: React.FC<LobbyConnectProps> = (props: LobbyConnectProps) =
                            }}
                     />
                 </FormGroup>
-                <Button color="primary" size="lg" block onClick={() => connectToLobby} disabled={loginLengthLeft < 0}>Join lobby</Button>
-                <Button color="primary" size="lg" block onClick={() => createLobby}>Create lobby</Button>
+                <Button color="primary" size="lg" block onClick={connectToLobby} disabled={loginLengthLeft < 0 || lobbyCode.length != 4}>
+                    {!props.isLoadingConnect && "Join lobby"}
+                    {props.isLoadingConnect && <Spinner/>}
+                </Button>
+                <Button color="primary" size="lg" block onClick={createLobby}>Create lobby</Button>
                 {props.connectError &&
                 <h1>Wrong lobby code</h1>
                 }
@@ -65,8 +70,8 @@ const LobbyConnector: React.FC<LobbyConnectProps> = (props: LobbyConnectProps) =
 export default connect(
     (state: ApplicationState) => {
         return {
-            ...state.loginInfo,
-            ...state.createInfo
+            ...state.connect,
+            ...state.create
         }
     },
     LobbyConnect.actionCreators
