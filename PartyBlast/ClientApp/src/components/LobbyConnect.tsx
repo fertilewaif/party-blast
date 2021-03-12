@@ -37,6 +37,7 @@ const LobbyConnector: React.FC<LobbyConnectProps> = (props: LobbyConnectProps) =
                     <Label className="text-right" style={{ width: "75%"}}>{loginLengthLeft}</Label>
                     <Input type="text"
                            onChange={(ev): void => {
+                               ev.target.value = ev.target.value.toUpperCase()
                                setLogin(ev.target.value);
                                setLoginLengthLeft(maxLength - ev.target.value.length);
                            }}
@@ -46,11 +47,12 @@ const LobbyConnector: React.FC<LobbyConnectProps> = (props: LobbyConnectProps) =
                     <Label>Lobby code</Label>
                     <Input type="text"
                            onChange={(ev): void => {
+                               ev.target.value = ev.target.value.toUpperCase();
                                setLobbyCode(ev.target.value);
                            }}
                     />
                 </FormGroup>
-                <Button color="primary" size="lg" block onClick={connectToLobby} disabled={loginLengthLeft < 0 || lobbyCode.length != 4}>
+                <Button color="primary" size="lg" block onClick={connectToLobby} disabled={loginLengthLeft < 0 || lobbyCode.length !== 4}>
                     {!props.isLoadingConnect && "Join lobby"}
                     {props.isLoadingConnect && <Spinner/>}
                 </Button>

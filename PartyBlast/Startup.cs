@@ -71,7 +71,7 @@ namespace PartyBlast
             services.AddSingleton<ILobbyProvider, LobbyProvider>();
             
             // di for game creators
-            services.AddScoped<QuizGameCreator>();
+            services.AddSingleton<QuizGameCreator>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -61,7 +61,7 @@ interface CreateLobbyRequest {
 }
 
 interface CreateLobbyResponse {
-    LobbyCode: string;
+    roomCode: string;
 }
 
 interface CreateLobbyRequestAction {
@@ -81,7 +81,7 @@ export const actionCreators = {
     requestCreate: (gameName: CreateLobbyRequest): AppThunkAction<CreateAction> => (dispatch, getState) => {
         const appState = getState();
         if (appState && appState.create && !appState.create.lobbyCode) {
-            fetch('/api/create', {
+            fetch('/api/lobby/create', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -89,7 +89,7 @@ export const actionCreators = {
                 },
                 body: JSON.stringify(gameName)
             }).then(response => response.json() as Promise<CreateLobbyResponse>).then(json => {
-                dispatch({type: 'CREATE_RESPONSE', lobbyCode: json.LobbyCode})
+                dispatch({type: 'CREATE_RESPONSE', lobbyCode: json.roomCode})
             })
         }
     },
@@ -98,7 +98,7 @@ export const actionCreators = {
         // connect only if we are not logged in
         const appState = getState();
         if (appState && appState.connect && !appState.connect.connected) {
-            fetch('/api/connect', {
+            fetch('/api/lobby/connect', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

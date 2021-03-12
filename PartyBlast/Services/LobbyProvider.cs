@@ -64,7 +64,7 @@ namespace PartyBlast.Services
             var res = "";
             for (int i = 0; i < LobbyCodeLength; i++)
             {
-                res += 'A' + Random.Next('Z' - 'A' + 1);
+                res += (char) Random.Next('A', 'Z');
             }
 
             return res;
