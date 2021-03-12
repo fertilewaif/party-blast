@@ -4,6 +4,7 @@ namespace PartyBlast.Models
 {
     public class CreateLobbyViewModel
     {
-        public string GameName { get;  } 
+        [Required]
+        public string GameName { get; set; } 
     }
 }

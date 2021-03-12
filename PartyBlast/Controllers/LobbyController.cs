@@ -5,6 +5,8 @@ using PartyBlast.Services;
 
 namespace PartyBlast.Controllers
 {
+    [ApiController]
+    [Route("api/lobby/")]
     public class LobbyController : Controller
     {
         private ILobbyProvider _lobbyProvider;
@@ -15,6 +17,7 @@ namespace PartyBlast.Controllers
         }
 
         [HttpPost]
+        [Route("create")]
         public IActionResult CreateLobby([FromBody] CreateLobbyViewModel createLobbyViewModel)
         {
             try
@@ -35,6 +38,7 @@ namespace PartyBlast.Controllers
         }
 
         [HttpPost]
+        [Route("connect")]
         public IActionResult ConnectToLobby([FromBody] ConnectToLobbyViewModel connectToLobbyViewModel)
         {
             try

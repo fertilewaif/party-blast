@@ -11,6 +11,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 using PartyBlast.Services;
 
 namespace PartyBlast
@@ -61,6 +62,11 @@ namespace PartyBlast
 
             services.AddSignalR();
 
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo {Title = "PartyBlast.Api", Version = "v1"});
+            });
+
             // di for lobby provider (singleton cause it has its own state)
             services.AddSingleton<ILobbyProvider, LobbyProvider>();
             
@@ -74,6 +80,9 @@ namespace PartyBlast
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+                
+                app.UseSwagger();
+                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "PartyBlast.Api v1"));
             }
             else
             {
@@ -93,10 +102,12 @@ namespace PartyBlast
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapControllerRoute(
-                    name: "default",
-                    pattern: "{controller}/{action=Index}/{id?}");
+                //endpoints.MapControllerRoute(
+                //    name: "default",
+                //    pattern: "{controller}/{action=Index}/{id?}");
 
+                endpoints.MapControllers();
+                
                 endpoints.MapHub<GameHub>("/game");
             });
 

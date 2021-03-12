@@ -4,10 +4,12 @@ namespace PartyBlast.Models
 {
     public class ConnectToLobbyViewModel
     {
-        public string Login { get; }
+        [Required]
+        public string Login { get; set; }
         
+        [Required]
         [MinLength(4)]
         [MaxLength(4)]
-        public string GameCode { get; }
+        public string GameCode { get; set; }
     }
 }
