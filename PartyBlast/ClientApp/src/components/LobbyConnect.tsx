@@ -21,12 +21,12 @@ const LobbyConnector: React.FC<LobbyConnectProps> = (props: LobbyConnectProps) =
     
     const createLobby = (event: React.MouseEvent<HTMLButtonElement>) => {
         event.preventDefault();
-        props.requestCreate({gameName: "quiz"});
+        props.requestCreate({GameName: "quiz"});
     };
 
     const connectToLobby = (event: React.MouseEvent<HTMLButtonElement>) => {
         event.preventDefault();
-        props.requestConnect({login: login, lobbyCode: lobbyCode});
+        props.requestConnect({Login: login, LobbyCode: lobbyCode});
     };
 
     return (

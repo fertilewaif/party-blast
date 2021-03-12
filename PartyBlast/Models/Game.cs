@@ -21,6 +21,8 @@ namespace PartyBlast.Models
 
         protected IConfiguration _configuration;
 
+        public string GameCode => _gameCode;
+
         protected Game(IConfiguration configuration, IHubContext<GameHub> gameHubContext, string gameCode)
         {
             _configuration = configuration;

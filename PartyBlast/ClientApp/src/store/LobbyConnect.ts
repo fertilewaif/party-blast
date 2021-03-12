@@ -40,13 +40,13 @@ type KnownAction = LogInSuccessAction | LogInErrorAction | LogInRequestAction;
 // ------------------
 // REQUESTS/RESPONSES - this are temporary interfaces for parsing api responses
 export interface ConnectRequest {
-    login: string;
-    lobbyCode: string;
+    Login: string;
+    LobbyCode: string;
 }
 
 interface ConnectResponse {
-    login: string;
-    gameName: string;
+    Login: string;
+    GameName: string;
 }
 
 // TEMPORARY INTERFACES FOR CREATING QUIZ LOBBY
@@ -57,11 +57,11 @@ export interface CreateLobbyState {
 }
 
 interface CreateLobbyRequest {
-    gameName: string;
+    GameName: string;
 }
 
 interface CreateLobbyResponse {
-    lobbyCode: string;
+    LobbyCode: string;
 }
 
 interface CreateLobbyRequestAction {
@@ -89,7 +89,7 @@ export const actionCreators = {
                 },
                 body: JSON.stringify(gameName)
             }).then(response => response.json() as Promise<CreateLobbyResponse>).then(json => {
-                dispatch({type: 'CREATE_RESPONSE', lobbyCode: json.lobbyCode})
+                dispatch({type: 'CREATE_RESPONSE', lobbyCode: json.LobbyCode})
             })
         }
     },
@@ -108,13 +108,13 @@ export const actionCreators = {
             }).then(response => {
                 if (response.ok) {
                     (response.json() as Promise<ConnectResponse>).then(json =>
-                        dispatch({type: 'CONNECT_SUCCESS', login: json.login, gameName: json.gameName})
+                        dispatch({type: 'CONNECT_SUCCESS', login: json.Login, gameName: json.GameName})
                     )
                 } else if (response.status === 401) {
                     dispatch({type: 'CONNECT_ERROR'})
                 }
             })
-            dispatch({type: 'CONNECT_REQUEST', lobbyCode: login.lobbyCode});
+            dispatch({type: 'CONNECT_REQUEST', lobbyCode: login.LobbyCode});
         }
     }
 }

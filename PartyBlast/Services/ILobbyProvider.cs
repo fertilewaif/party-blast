@@ -5,7 +5,7 @@ namespace PartyBlast.Services
 {
     public interface ILobbyProvider
     {
-        public Game CreateGame(string gameName);
+        public string CreateGame(string gameName);
 
         public ConnectResult TryConnect(string lobbyCode, string username);
     }

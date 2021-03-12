@@ -23,7 +23,7 @@ namespace PartyBlast.Services
             _gameCreators.Add("quiz", (GameCreator) serviceProvider.GetService(typeof(QuizGameCreator)));
         }
         
-        public Game CreateGame(string gameName)
+        public string CreateGame(string gameName)
         {
             if (!_gameCreators.ContainsKey(gameName))
             {
@@ -32,7 +32,11 @@ namespace PartyBlast.Services
 
             var code = GenerateCode();
 
-            return _gameCreators[gameName].CreateGame(code);
+            var game = _gameCreators[gameName].CreateGame(code);
+
+            _presentGames[code] = game;
+            
+            return game.GameCode;
         }
 
         public ConnectResult TryConnect(string lobbyCode, string username)

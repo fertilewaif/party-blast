@@ -11,6 +11,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
+using PartyBlast.Services;
 
 namespace PartyBlast
 {
@@ -57,6 +58,14 @@ namespace PartyBlast
                         };
                     }
                 );
+
+            services.AddSignalR();
+
+            // di for lobby provider (singleton cause it has its own state)
+            services.AddSingleton<ILobbyProvider, LobbyProvider>();
+            
+            // di for game creators
+            services.AddScoped<QuizGameCreator>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -87,6 +96,8 @@ namespace PartyBlast
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller}/{action=Index}/{id?}");
+
+                endpoints.MapHub<GameHub>("/game");
             });
 
             app.UseSpa(spa =>
